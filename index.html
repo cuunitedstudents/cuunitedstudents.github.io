@@ -466,47 +466,6 @@
       color: var(--slate-700);
     }
 
-    /* Document Downloads */
-    .doc-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      flex-wrap: wrap;
-      padding: 1rem;
-      border: 1px solid var(--slate-200);
-      border-radius: 12px;
-      background: var(--bg);
-      margin-bottom: 0.75rem;
-    }
-    .doc-item:last-child { margin-bottom: 0; }
-    .doc-meta {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--teal-600);
-      letter-spacing: 0.4px;
-    }
-    .doc-title {
-      font-weight: 600;
-      color: var(--slate-900);
-      font-size: 0.95rem;
-      margin-top: 0.15rem;
-    }
-    .dl-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      background: var(--navy-900);
-      color: #fff;
-      padding: 0.55rem 1rem;
-      border-radius: 8px;
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 600;
-      transition: background 0.15s;
-    }
-    .dl-btn:hover { background: var(--indigo-600); }
-
     footer {
       text-align: center;
       color: var(--slate-500);
@@ -721,29 +680,43 @@
       </div>
 
       <div class="notice-item">
-        <span class="notice-date">22 November 2026</span>
+        <span class="notice-date">23 November 2026</span>
         <h3>Official Portal &amp; Student Data Drive Live</h3>
         <p>Our official website, Instagram, and Facebook community pages are now live. All affected CBCS and CCF batch students are requested to complete the Google Form before joining our WhatsApp coordination group so we can present verified numbers during administrative talks.</p>
       </div>
     </section>
 
-    <!-- Downloadable Letters -->
+    <!-- Drive-Backed Individual Letters -->
     <section class="card" id="letters">
       <div class="section-header">
-        <h2>Letters &amp; Official Documents</h2>
-        <span class="section-tag">Downloads</span>
+        <h2>Individual Student Letters</h2>
+        <span class="section-tag">Roll-Number Verified</span>
       </div>
 
-      <div class="doc-item">
-        <div>
-          <div class="doc-meta">REPRESENTATION LETTER • PDF</div>
-          <div class="doc-title">Application Regarding CBCS Registration Extension &amp; Student Representation</div>
-        </div>
-        <a class="dl-btn" href="letters/cu-registration-extension-letter.pdf" download>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download PDF
-        </a>
+      <p class="lead-text" style="margin-bottom: 1rem;">
+        Enter your <strong>Calcutta University Roll Number</strong> below to verify and download your individual representation letter directly from our secure archive.
+      </p>
+
+      <div style="display: flex; gap: 0.65rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+        <input
+          type="text"
+          id="rollInput"
+          placeholder="Enter CU Roll No (e.g. 213411-11-0045)"
+          autocomplete="off"
+          style="flex: 1; min-width: 220px; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; text-transform: uppercase;"
+        />
+        <button
+          type="button"
+          id="fetchBtn"
+          onclick="fetchDriveLetter()"
+          class="btn btn-primary"
+          style="border: none; cursor: pointer;"
+        >
+          Get My Letter
+        </button>
       </div>
+
+      <div id="letterStatus" style="font-size: 0.9rem; font-weight: 600; min-height: 1.5rem;"></div>
     </section>
 
     <footer>
@@ -752,6 +725,57 @@
     </footer>
 
   </main>
+
+  <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxxmoG0WGaIvasK2jY0QFH-HkzddZs6OGoUzQcLunEZWy6CoAQGX9LpA_5UmtcSkIMh/exec";
+
+    document.getElementById("rollInput").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        fetchDriveLetter();
+      }
+    });
+
+    async function fetchDriveLetter() {
+      const input = document.getElementById("rollInput").value.trim().toUpperCase();
+      const status = document.getElementById("letterStatus");
+      const btn = document.getElementById("fetchBtn");
+
+      if (!input) {
+        status.style.color = "#b91c1c";
+        status.textContent = "Please enter your valid CU Roll Number.";
+        return;
+      }
+
+      btn.disabled = true;
+      btn.style.opacity = "0.7";
+      status.style.color = "#4338ca";
+      status.textContent = "Checking archive for " + input + "...";
+
+      const scriptUrl = WEB_APP_URL + "?roll=" + encodeURIComponent(input);
+
+      try {
+        const res = await fetch(scriptUrl);
+        const data = await res.json();
+
+        if (data.ok) {
+          status.style.color = "#059669";
+          status.innerHTML = `Letter found for <strong>${data.roll}</strong>! 
+            <a href="${data.downloadUrl}" style="color: #059669; text-decoration: underline; margin-left: 6px;">Download PDF</a> &bull; 
+            <a href="${data.viewUrl}" target="_blank" rel="noopener" style="color: #1d4ed8; text-decoration: underline;">View in Drive</a>`;
+        } else {
+          status.style.color = "#b91c1c";
+          status.textContent = data.error || "No letter found for this Roll Number.";
+        }
+      } catch (err) {
+        status.style.color = "#b91c1c";
+        status.textContent = "Could not connect to archive. Please try again.";
+      } finally {
+        btn.disabled = false;
+        btn.style.opacity = "1";
+      }
+    }
+  </script>
 
 </body>
 </html>
