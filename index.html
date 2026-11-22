@@ -14,6 +14,9 @@
       --teal-600: #0d9488;
       --teal-50: #f0fdfa;
       --emerald-600: #059669;
+      --emerald-50: #ecfdf5;
+      --emerald-200: #a7f3d0;
+      --emerald-900: #064e3b;
       --amber-50: #fffbeb;
       --amber-200: #fde68a;
       --amber-900: #78350f;
@@ -79,8 +82,8 @@
     }
     .nav-links {
       display: flex;
-      gap: 1.25rem;
-      font-size: 0.88rem;
+      gap: 1.15rem;
+      font-size: 0.86rem;
       font-weight: 600;
     }
     .nav-links a {
@@ -143,7 +146,7 @@
     }
     .hero p {
       margin: 1rem auto 0;
-      max-width: 610px;
+      max-width: 620px;
       color: #cbd5e1;
       font-size: 1.06rem;
     }
@@ -170,6 +173,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
       margin-bottom: 1.1rem;
       padding-bottom: 0.75rem;
       border-bottom: 1px solid var(--slate-100);
@@ -187,6 +192,11 @@
       background: var(--slate-100);
       padding: 0.25rem 0.65rem;
       border-radius: 6px;
+    }
+    .section-tag-green {
+      background: var(--emerald-50);
+      color: var(--emerald-900);
+      border: 1px solid var(--emerald-200);
     }
 
     /* Mandatory Step Banner */
@@ -342,6 +352,90 @@
       line-height: 1.55;
     }
 
+    /* Impact Stats & Progress Milestones */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 0.85rem;
+      margin-bottom: 1.4rem;
+    }
+    .stat-box {
+      background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+      border: 1px solid var(--slate-200);
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--navy-900);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--slate-500);
+      margin-top: 0.25rem;
+    }
+
+    .milestone-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+    .milestone {
+      display: flex;
+      gap: 0.9rem;
+      align-items: flex-start;
+      padding: 1rem 1.1rem;
+      border-radius: 12px;
+      border: 1px solid var(--slate-200);
+      background: var(--bg);
+    }
+    .milestone.win {
+      background: var(--emerald-50);
+      border-color: var(--emerald-200);
+    }
+    .milestone-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: var(--indigo-50);
+      color: var(--indigo-600);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .milestone.win .milestone-icon {
+      background: var(--emerald-600);
+      color: #fff;
+    }
+    .milestone-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--emerald-900);
+      background: rgba(16, 185, 129, 0.18);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      margin-bottom: 0.25rem;
+    }
+    .milestone h3 {
+      font-size: 0.98rem;
+      color: var(--slate-900);
+      margin-bottom: 0.2rem;
+    }
+    .milestone p {
+      font-size: 0.89rem;
+      color: var(--slate-700);
+      line-height: 1.55;
+    }
+
     /* Notice Timeline */
     .notice-item {
       position: relative;
@@ -421,7 +515,7 @@
     }
     footer strong { color: var(--slate-700); }
 
-    @media (max-width: 600px) {
+    @media (max-width: 640px) {
       .nav-links { display: none; }
       .card { padding: 1.35rem; }
       .hero { padding: 3.25rem 1rem 4rem; }
@@ -440,6 +534,7 @@
       <div class="nav-links">
         <a href="#join">Join</a>
         <a href="#objectives">Objectives</a>
+        <a href="#progress">Progress</a>
         <a href="#notices">Notices</a>
         <a href="#letters">Letters</a>
       </div>
@@ -543,6 +638,77 @@
           <div class="obj-num">03</div>
           <h3>CCF Batch Student Support</h3>
           <p>Building a continuous, apolitical student support network to resolve academic and administrative challenges faced by current and future CCF batch students.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Track Record & Achievements -->
+    <section class="card" id="progress">
+      <div class="section-header">
+        <h2>Our Progress &amp; Key Achievements</h2>
+        <span class="section-tag section-tag-green">1 Year of Active Work at CU</span>
+      </div>
+
+      <div class="stats-bar">
+        <div class="stat-box">
+          <div class="stat-value">1+ Year</div>
+          <div class="stat-label">Active Presence at CU</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value">3 Rounds</div>
+          <div class="stat-label">Joint Talks with Top CU Officials</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value">Special Review</div>
+          <div class="stat-label">Approved for Backlog Students</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value">2 Academic Years</div>
+          <div class="stat-label">Saved via FSI &amp; Review Help</div>
+        </div>
+      </div>
+
+      <div class="milestone-list">
+        <div class="milestone win">
+          <div class="milestone-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div>
+            <span class="milestone-badge">Major Achievement</span>
+            <h3>Special Review Granted for Backlog Students</h3>
+            <p>Following our continuous constructive dialogue with university authorities, the Hon'ble Vice Chancellor approved the Special Review opportunity for backlog students.</p>
+          </div>
+        </div>
+
+        <div class="milestone win">
+          <div class="milestone-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div>
+            <span class="milestone-badge">Direct Student Impact</span>
+            <h3>FSI Guidance &amp; Two Students Passed Without Re-Sitting Exams</h3>
+            <p>Through our step-by-step guidance on the FSI (Self-Inspection) and review process, two students successfully cleared their backlog papers without having to sit for another examination—saving a full academic year for each of them.</p>
+          </div>
+        </div>
+
+        <div class="milestone">
+          <div class="milestone-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div>
+            <h3>3 Joint Administrative Meetings on the Extension Issue</h3>
+            <p>Over the past year at Calcutta University, we held <strong>3 formal meetings</strong> with the <strong>Hon'ble Vice Chancellor</strong>, the <strong>Controller of Examinations</strong>, and the <strong>Registrar</strong>—with the <strong>Pro-Vice Chancellor (Academic)</strong> also joining the third meeting—to press for the CBCS extension.</p>
+          </div>
+        </div>
+
+        <div class="milestone">
+          <div class="milestone-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <div>
+            <h3>Mass Submission of Student Representation Letters</h3>
+            <p>Collected and mass-submitted documented representation letters signed by affected students to university offices so individual grievances are placed officially on record.</p>
+          </div>
         </div>
       </div>
     </section>
