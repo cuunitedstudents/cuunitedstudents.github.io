@@ -727,7 +727,7 @@
   </main>
 
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxxmoG0WGaIvasK2jY0QFH-HkzddZs6OGoUzQcLunEZWy6CoAQGX9LpA_5UmtcSkIMh/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxUdN_htoLupvt5RCnpWmAKo23oNeGCYc0AVfGlZfZhr5BUSNrGTQ-_QWfUDb8mYfGh/exec";
 
     document.getElementById("rollInput").addEventListener("keydown", function (e) {
       if (e.key === "Enter") {
@@ -736,7 +736,7 @@
       }
     });
 
-    async function fetchDriveLetter() {
+    function fetchDriveLetter() {
       const input = document.getElementById("rollInput").value.trim().toUpperCase();
       const status = document.getElementById("letterStatus");
       const btn = document.getElementById("fetchBtn");
@@ -752,12 +752,25 @@
       status.style.color = "#4338ca";
       status.textContent = "Checking archive for " + input + "...";
 
-      const scriptUrl = WEB_APP_URL + "?roll=" + encodeURIComponent(input);
+      const callbackName = "cuCallback_" + Date.now();
+      const script = document.createElement("script");
 
-      try {
-        const res = await fetch(scriptUrl);
-        const data = await res.json();
+      const timeout = setTimeout(() => {
+        cleanup();
+        status.style.color = "#b91c1c";
+        status.textContent = "Request timed out. Please check your connection and try again.";
+      }, 15000);
 
+      function cleanup() {
+        clearTimeout(timeout);
+        delete window[callbackName];
+        if (script.parentNode) script.parentNode.removeChild(script);
+        btn.disabled = false;
+        btn.style.opacity = "1";
+      }
+
+      window[callbackName] = function (data) {
+        cleanup();
         if (data.ok) {
           status.style.color = "#059669";
           status.innerHTML = `Letter found for <strong>${data.roll}</strong>! 
@@ -767,13 +780,16 @@
           status.style.color = "#b91c1c";
           status.textContent = data.error || "No letter found for this Roll Number.";
         }
-      } catch (err) {
+      };
+
+      script.onerror = function () {
+        cleanup();
         status.style.color = "#b91c1c";
-        status.textContent = "Could not connect to archive. Please try again.";
-      } finally {
-        btn.disabled = false;
-        btn.style.opacity = "1";
-      }
+        status.textContent = "Could not reach archive. Ensure Apps Script access is set to 'Anyone'.";
+      };
+
+      script.src = WEB_APP_URL + "?roll=" + encodeURIComponent(input) + "&callback=" + callbackName;
+      document.body.appendChild(script);
     }
   </script>
 
