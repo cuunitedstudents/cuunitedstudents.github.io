@@ -463,22 +463,45 @@
       line-height: 1.55;
     }
 
-    /* Notice & Letter Archive */
+    /* Live Notice Board & Letter Archive */
+    #noticesContainer {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
     .notice-card {
       background: #ffffff;
       border-radius: var(--radius-lg);
-      padding: 32px;
-      margin-bottom: 24px;
+      padding: 30px 32px;
       box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+      transition: transform 0.25s ease;
+    }
+
+    .notice-card:first-child {
+      border: 1px solid rgba(0, 113, 227, 0.22);
     }
 
     .notice-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       font-size: 12px;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--text-tertiary);
       margin-bottom: 6px;
+    }
+
+    .notice-latest-pill {
+      background: rgba(0, 113, 227, 0.1);
+      color: var(--accent-blue);
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 600;
     }
 
     .notice-card h3 {
@@ -492,6 +515,7 @@
       font-size: 16px;
       color: var(--text-secondary);
       line-height: 1.55;
+      white-space: pre-line;
     }
 
     /* Apple-style Search Input Box */
@@ -931,18 +955,21 @@
     </div>
   </section>
 
-  <!-- Notices & Roll-Number Letter Archive -->
+  <!-- Live Notice Board & Roll-Number Letter Archive -->
   <section class="section-band gray" id="notices">
     <div class="inner reveal">
       <div class="section-heading">
         <h2>Notices &amp; Individual Letters.</h2>
-        <p>Official updates and private, roll-number-verified document access.</p>
+        <p>Live official updates and private, roll-number-verified document access.</p>
       </div>
 
-      <div class="notice-card">
-        <div class="notice-meta">23 November 2026 &bull; Official Notice</div>
-        <h3>Portal &amp; Student Data Collection Live</h3>
-        <p>Our website, Instagram, and Facebook community pages are now active. Affected CBCS and CCF batch students should submit their details via the Google Form before joining our WhatsApp coordination group.</p>
+      <!-- Automatically populated from your Google Sheet -->
+      <div id="noticesContainer">
+        <div class="notice-card">
+          <div class="notice-meta">23 November 2026 &bull; Official Notice</div>
+          <h3>Portal &amp; Student Data Collection Live</h3>
+          <p>Our website, Instagram, and Facebook community pages are now active. Affected CBCS and CCF batch students should submit their details via the Google Form before joining our WhatsApp coordination group.</p>
+        </div>
       </div>
 
       <div class="lookup-panel" id="letters">
@@ -1089,6 +1116,8 @@
   </nav>
 
   <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyuzPUw_zr24r2brDIdmc-URAuG1dJ3c4bSs4uHW8jdnF2rwYuiT7KsSqf-BVI9RZln/exec";
+
     // Smooth scroll-reveal observer
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -1120,9 +1149,51 @@
       });
     }, { passive: true });
 
-    // Roll-number lookup via JSONP
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxUdN_htoLupvt5RCnpWmAKo23oNeGCYc0AVfGlZfZhr5BUSNrGTQ-_QWfUDb8mYfGh/exec";
+    // Escape HTML helper for safe rendering
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
 
+    // Load Live Notices from Google Sheet via JSONP
+    function loadLiveNotices() {
+      const container = document.getElementById("noticesContainer");
+      const callbackName = "cuNoticesCb_" + Date.now();
+      const script = document.createElement("script");
+
+      window[callbackName] = function (data) {
+        delete window[callbackName];
+        if (script.parentNode) script.parentNode.removeChild(script);
+
+        if (data && data.ok && Array.isArray(data.notices) && data.notices.length > 0) {
+          container.innerHTML = data.notices.map((n, index) => `
+            <div class="notice-card">
+              <div class="notice-meta">
+                ${index === 0 ? '<span class="notice-latest-pill">Latest</span>' : ''}
+                <span>${escapeHtml(n.date || "Official Notice")}</span>
+              </div>
+              <h3>${escapeHtml(n.title)}</h3>
+              <p>${escapeHtml(n.message)}</p>
+            </div>
+          `).join("");
+        }
+      };
+
+      script.onerror = function () {
+        delete window[callbackName];
+        if (script.parentNode) script.parentNode.removeChild(script);
+      };
+
+      script.src = WEB_APP_URL + "?action=notices&callback=" + callbackName;
+      document.body.appendChild(script);
+    }
+
+    loadLiveNotices();
+
+    // Roll-number lookup via JSONP
     document.getElementById("rollInput").addEventListener("keydown", function (e) {
       if (e.key === "Enter") {
         e.preventDefault();
