@@ -4,6 +4,29 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CU United — The Voice of Students</title>
+  <meta name="description" content="An independent, 100% apolitical Calcutta University student collective dedicated to fair academic timelines, transparent FSI & Review evaluation, and constructive administrative dialogue." />
+
+  <!-- Favicon (Browser Tab Icon) -->
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="apple-touch-icon" href="logo.png" />
+
+  <!-- Open Graph / WhatsApp / Facebook / Instagram Link Preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="CU United" />
+  <meta property="og:title" content="CU United — The Voice of Students" />
+  <meta property="og:description" content="100% Apolitical Calcutta University Student Collective. Join our verified portal, read official notices, and download your roll-number-protected representation letter." />
+  <meta property="og:url" content="https://cuunitedstudents.github.io/" />
+  <meta property="og:image" content="https://cuunitedstudents.github.io/logo.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1024" />
+  <meta property="og:image:height" content="1024" />
+
+  <!-- Twitter / X Large Preview Card -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="CU United — The Voice of Students" />
+  <meta name="twitter:description" content="100% Apolitical Calcutta University Student Collective. Official portal, notices, and roll-number-verified representation letters." />
+  <meta name="twitter:image" content="https://cuunitedstudents.github.io/logo.png" />
+
   <style>
     :root {
       --bg-page: #ffffff;
@@ -40,8 +63,8 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      height: 48px;
-      background: rgba(255, 255, 255, 0.78);
+      height: 52px;
+      background: rgba(255, 255, 255, 0.8);
       backdrop-filter: saturate(180%) blur(20px);
       -webkit-backdrop-filter: saturate(180%) blur(20px);
       border-bottom: 1px solid var(--border-light);
@@ -65,14 +88,15 @@
       text-decoration: none;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
 
-    .nav-dot {
-      width: 8px;
-      height: 8px;
+    .nav-crest {
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
-      background: var(--text-primary);
+      object-fit: cover;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
     }
 
     .nav-menu {
@@ -112,8 +136,18 @@
     .hero {
       max-width: 980px;
       margin: 0 auto;
-      padding: 96px 22px 76px;
+      padding: 84px 22px 76px;
       text-align: center;
+    }
+
+    .hero-crest {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 22px;
+      display: block;
+      box-shadow: 0 8px 24px rgba(9, 17, 36, 0.16);
     }
 
     .eyebrow {
@@ -664,7 +698,7 @@
     @media (max-width: 680px) {
       .nav-menu a:not(.nav-cta) { display: none; }
       .dark-cards { grid-template-columns: 1fr; }
-      .hero { padding: 64px 20px 54px; }
+      .hero { padding: 56px 20px 54px; }
       .section-band { padding: 56px 20px; }
       .faq-item summary { font-size: 16px; padding: 18px 2px; }
     }
@@ -676,7 +710,7 @@
   <nav class="global-nav">
     <div class="nav-container">
       <a href="#" class="nav-logo">
-        <span class="nav-dot"></span>
+        <img src="logo.png" alt="CU United Logo" class="nav-crest" />
         <span>CU United</span>
       </a>
       <div class="nav-menu">
@@ -692,6 +726,7 @@
 
   <!-- Minimalist Hero -->
   <header class="hero">
+    <img src="logo.png" alt="CU United – The Voice of Students" class="hero-crest" />
     <div class="eyebrow">100% Apolitical Student Collective</div>
     <h1 class="hero-title">CU United.<br /><span>The Voice of Students.</span></h1>
     <p class="hero-subtitle">
