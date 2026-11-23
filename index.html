@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>CU United — The Voice of Students</title>
   <meta name="description" content="An independent, 100% apolitical Calcutta University student collective dedicated to fair academic timelines, transparent FSI & Review evaluation, and constructive administrative dialogue." />
 
@@ -21,7 +21,7 @@
   <meta property="og:image:width" content="1024" />
   <meta property="og:image:height" content="1024" />
 
-  <!-- Twitter / X Large Preview Card -->
+  <!-- Twitter / X Preview Card -->
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="CU United — The Voice of Students" />
   <meta name="twitter:description" content="100% Apolitical Calcutta University Student Collective. Official portal, notices, and roll-number-verified representation letters." />
@@ -231,6 +231,7 @@
     /* Section Containers */
     .section-band {
       padding: 80px 22px;
+      scroll-margin-top: 52px;
     }
 
     .section-band.gray {
@@ -500,6 +501,7 @@
       padding: 40px 32px;
       text-align: center;
       box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+      scroll-margin-top: 68px;
     }
 
     .lookup-panel h3 {
@@ -683,6 +685,11 @@
       gap: 12px;
     }
 
+    /* Mobile Sticky Action Bar (Hidden on Desktop) */
+    .mobile-dock {
+      display: none;
+    }
+
     /* Scroll Reveal Animation */
     .reveal {
       opacity: 0;
@@ -701,6 +708,53 @@
       .hero { padding: 56px 20px 54px; }
       .section-band { padding: 56px 20px; }
       .faq-item summary { font-size: 16px; padding: 18px 2px; }
+
+      footer {
+        padding-bottom: calc(96px + env(safe-area-inset-bottom));
+      }
+
+      .mobile-dock {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        position: fixed;
+        left: 14px;
+        right: 14px;
+        bottom: calc(14px + env(safe-area-inset-bottom));
+        z-index: 120;
+        padding: 6px;
+        border-radius: var(--radius-pill);
+        background: rgba(29, 29, 31, 0.86);
+        backdrop-filter: saturate(180%) blur(20px);
+        -webkit-backdrop-filter: saturate(180%) blur(20px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.24), 0 0 0 1px rgba(255, 255, 255, 0.12);
+      }
+
+      .dock-item {
+        flex: 1;
+        text-align: center;
+        padding: 9px 6px;
+        border-radius: var(--radius-pill);
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: -0.01em;
+        color: rgba(255, 255, 255, 0.85);
+        text-decoration: none;
+        transition: background 0.2s ease, color 0.2s ease;
+        white-space: nowrap;
+      }
+
+      .dock-item.active {
+        background: rgba(255, 255, 255, 0.16);
+        color: #ffffff;
+      }
+
+      .dock-item.primary {
+        background: var(--accent-blue);
+        color: #ffffff;
+        font-weight: 600;
+      }
     }
   </style>
 </head>
@@ -1026,6 +1080,14 @@
     </div>
   </footer>
 
+  <!-- Mobile Sticky Action Bar -->
+  <nav class="mobile-dock" aria-label="Mobile Quick Navigation">
+    <a href="#join" class="dock-item" data-target="join">Join</a>
+    <a href="#notices" class="dock-item" data-target="notices">Notices</a>
+    <a href="#letters" class="dock-item primary" data-target="letters">Get Letter</a>
+    <a href="#faq" class="dock-item" data-target="faq">FAQ</a>
+  </nav>
+
   <script>
     // Smooth scroll-reveal observer
     const observer = new IntersectionObserver((entries) => {
@@ -1037,6 +1099,26 @@
     }, { threshold: 0.1 });
 
     document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+
+    // Highlight active section in Mobile Sticky Action Bar
+    const dockLinks = document.querySelectorAll(".mobile-dock .dock-item:not(.primary)");
+    const sectionIds = ["join", "notices", "faq"];
+
+    window.addEventListener("scroll", () => {
+      const scrollPos = window.scrollY + window.innerHeight * 0.45;
+      let currentId = "";
+
+      sectionIds.forEach((id) => {
+        const section = document.getElementById(id);
+        if (section && section.offsetTop <= scrollPos) {
+          currentId = id;
+        }
+      });
+
+      dockLinks.forEach((link) => {
+        link.classList.toggle("active", link.getAttribute("data-target") === currentId);
+      });
+    }, { passive: true });
 
     // Roll-number lookup via JSONP
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxUdN_htoLupvt5RCnpWmAKo23oNeGCYc0AVfGlZfZhr5BUSNrGTQ-_QWfUDb8mYfGh/exec";
